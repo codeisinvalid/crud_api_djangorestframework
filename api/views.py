@@ -45,7 +45,13 @@ def student_api(request):
         pythondata = JSONParser().parse(stream)
         id = pythondata.get('id')
         student = Student.objects.get(id = id)
-        serializer = StudentSerializer(student, data = pythondata, partial = True)
+
+        # Complete update, requires all the data from frontend/client
+        serializer = StudentSerializer(student, data = pythondata)
+
+        # patrial update, all the data not required
+        # serializer = StudentSerializer(student, data = pythondata, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             res = {'msg':'data updated'}
@@ -53,6 +59,18 @@ def student_api(request):
             return HttpResponse(json_data, content_type = 'application/json')
         json_error = JSONRenderer().render(serializer.errors)
         return HttpResponse(json_error, content_type = 'application/json')
+    
+    if request.method == "DELETE":
+        json_data = request.body
+        stream = io.BytesIO(json_data)
+        pythondata = JSONParser().parse(stream)
+        id = pythondata.get('id')
+        student = Student.objects.get(id = id)
+        student.delete()
+        res = {'msg':'data deleted'}
+        json_data = JSONRenderer().render(res)
+        return HttpResponse(json_data, content_type = 'application/json')
+
 
 
 
