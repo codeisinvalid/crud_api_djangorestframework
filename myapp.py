@@ -17,7 +17,7 @@ def get_data(id=None):
 def post_data():
     data = {
         'name':'sooj',
-        'roll':4,
+        'roll':500,
         'city':'butwal',
         'grade':'B.Tech'
     }
@@ -26,7 +26,7 @@ def post_data():
     data = r.json()
     print(data)
 
-# post_data()
+post_data()
 
 def update_data():
     data = {
